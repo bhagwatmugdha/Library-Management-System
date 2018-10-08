@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Books List </h1>
+  <hr>
+
+  <table class="table table-hover table-stripped">
+    <tr>
+      <th>Book Name</th>
+      <th>Number of Available Copies</th>
+    </tr>
+
+    {% for book in books %}
+      <tr>
+        <td>{{book.bookName}}</td>
+        <td>{{book.count}}</td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+{% endblock %}

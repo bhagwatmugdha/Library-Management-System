@@ -1,0 +1,37 @@
+* Creating and using a database to store all records *
+
+CREATE DATABASE library;
+
+* Naviagting to the database *
+
+USE library;
+
+* Create tables *
+
+CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), username VARCHAR(100), password VARCHAR(50) );
+
+select * from staff;
+
+CREATE TABLE students(student_id INT PRIMARY KEY AUTO_INCREMENT, studentName VARCHAR(100), email VARCHAR(100),  mobile VARCHAR(12), username VARCHAR(100), password VARCHAR(50));
+
+select * from students;
+
+CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100), addedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+
+select * from books;
+
+CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, student_id INT, staff_id INT, book_id INT, issueDate DATETIME, returnDate DATETIEM);
+
+select * from transactions;
+
+* Creating trigger to automatically set the issue and the return dates *
+CREATE TRIGGER set_date BEFORE INSERT ON `transactions` 
+FOR EACH ROW SET
+    NEW.issueDate = IFNULL(NEW.issueDate, NOW()),
+    NEW.returnDate = TIMESTAMPADD(DAY, 7, NEW.issueDate);
+
+* Inserting values *
+
+INSERT INTO books VALUES(bookName)(("Introduction to Operating Systems")("Introduction to Operating Systems"));
+
+INSERT INTO transactions(student_id, staff_id, book_id) VALUES(1, 1, 1);
