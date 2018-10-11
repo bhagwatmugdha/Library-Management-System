@@ -1,20 +1,37 @@
 * Creating and using a database to store all records *
 
-CREATE DATABASE hospital;
+CREATE DATABASE library;
 
-USE hospital;
+* Naviagting to the database *
+
+USE library;
 
 * Create tables *
 
-CREATE TABLE hospital(id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(100), password VARCHAR(150), hospital_name VARCHAR(50), location VARCHAR(20), contactNo VARCHAR(10), website VARCHAR(100));
+CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), username VARCHAR(100), password VARCHAR(50) );
 
-CREATE TABLE users(aadharNo BIGINT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(100), email VARCHAR(100), password VARCHAR(150), register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+select * from staff;
 
-CREATE TABLE data(test_id INT AUTO_INCREMENT PRIMARY KEY, test_name TEXT, hospital_name VARCHAR(100), aadharNo BIGINT, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE students(student_id INT PRIMARY KEY AUTO_INCREMENT, studentName VARCHAR(100), email VARCHAR(100),  mobile VARCHAR(12), username VARCHAR(100), password VARCHAR(50));
 
-CREATE TABLE bloodbank(bb_id INT AUTO_INCREMENT PRIMARY KEY, bb_name VARCHAR(100), bb_quantity BIGINT, username VARCHAR(100), aadharNo BIGINT, date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+select * from students;
 
-insert into bloodbank(bb_name, bb_quantity, username, aadharNo) values("Blood", 0, "kem", 1);
+CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100), addedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
+select * from books;
 
-% Add emergency docotrs list from all hospital %
+CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, student_id INT, staff_id INT, book_id INT, issueDate DATETIME, returnDate DATETIEM);
+
+select * from transactions;
+
+* Creating trigger to automatically set the issue and the return dates *
+CREATE TRIGGER set_date BEFORE INSERT ON `transactions` 
+FOR EACH ROW SET
+    NEW.issueDate = IFNULL(NEW.issueDate, NOW()),
+    NEW.returnDate = TIMESTAMPADD(DAY, 7, NEW.issueDate);
+
+* Inserting values *
+
+INSERT INTO books VALUES(bookName)(("Introduction to Operating Systems")("Introduction to Operating Systems"));
+
+INSERT INTO transactions(student_id, staff_id, book_id) VALUES(1, 1, 1);

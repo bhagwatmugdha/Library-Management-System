@@ -6,12 +6,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-# Config MySQL
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'msb1998'
-app.config['MYSQL_DB'] = 'hospital'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+app.config.from_pyfile('config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
