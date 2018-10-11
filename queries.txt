@@ -8,7 +8,7 @@ USE library;
 
 * Create tables *
 
-CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), username VARCHAR(100), password VARCHAR(50) );
+CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), username VARCHAR(100), password VARCHAR(150) );
 
 select * from staff;
 

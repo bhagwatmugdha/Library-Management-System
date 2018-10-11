@@ -6,7 +6,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-app.config.from_pyfile('config.py')
+app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -21,12 +21,8 @@ def about():
 
 # Register Form Class
 class RegisterForm(Form):
-    hospital_name = StringField("Hospital Name", [validators.Length(min=1, max=25)])
-    website = StringField('Website', [validators.Length(min=1, max=150)])
-    location = StringField('Location', [validators.Length(min=1, max=50)])
-    contactNo = StringField('Contact Number', [validators.Length(min=1, max=50)])
-
-    username = StringField('Username', [validators.Length(min=1, max=25)])
+    staffName = StringField("Name", [validators.Length(min=1, max=100)])
+    username = StringField('Username', [validators.Length(min=1, max=100)])
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
@@ -38,10 +34,7 @@ class RegisterForm(Form):
 def register():
         form = RegisterForm(request.form)
         if request.method == 'POST' and form.validate():
-            hospital_name = form.hospital_name.data
-            website = form.website.data
-            location = form.location.data
-            contactNo = form.contactNo.data
+            staffName = form.staffName.data
             username = form.username.data
             password = sha256_crypt.encrypt(str(form.password.data))
 
@@ -49,8 +42,7 @@ def register():
             cur = mysql.connection.cursor()
 
             # Executing Query
-            cur.execute("INSERT INTO hospital( username, password, hospital_name, location, contactNo, website) VALUES(%s, %s, %s, %s, %s, %s)", (username, password, hospital_name, location, contactNo, website))
-
+            cur.execute("INSERT INTO staff( staffName, username, password) VALUES(%s, %s, %s)", (staffName, username, password))
 
             # Commit to database
             mysql.connection.commit()
@@ -77,7 +69,7 @@ def login():
         cur = mysql.connection.cursor()
 
         # Get user by Username
-        result = cur.execute("SELECT * FROM hospital WHERE username = %s", [username])
+        result = cur.execute("SELECT * FROM staff WHERE username = %s", [username])
 
         if result > 0:
 
@@ -93,7 +85,7 @@ def login():
                 session['username'] = username
 
                 flash('You have successfully logged in', 'success')
-                return redirect(url_for('reportlist'))
+                return redirect(url_for('bookslist'))
 
             else:
                 error = 'Invalid login.'
@@ -118,6 +110,63 @@ def is_logged_in(f):
             flash('Unauthorized, please Login.', 'danger')
             return redirect(url_for('login'))
     return wrap
+
+# Creating the Books list
+@app.route('/bookslist')
+# @is_logged_in
+def bookslist():
+
+    # Create Cursor
+    cur = mysql.connection.cursor()
+
+    # Execute
+    result = cur.execute("SELECT bookName, count(bookName) AS count FROM books GROUP BY bookName")
+
+    books = cur.fetchall()
+
+    if result > 0:
+        return render_template('bookslist.html', books = books)
+    else:
+        msg = 'No books found'
+        return render_template('bookslist.html', msg= msg)
+
+    # Close connection
+    cur.close()
+
+# Report Form Class
+class ReportForm(Form):
+    student_id = StringField("Student ID", [validators.Length(min=1)])
+    staff_id = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
+    book_id = StringField("Book ID")
+
+# Add Report Form
+@app.route('/issue_books', methods=['GET', 'POST'])
+@is_logged_in
+def issue_books():
+    form = ReportForm(request.form)
+
+    if request.method == 'POST' and form.validate():
+        student_id = form.student_id.data
+        staff_id  = form.staff_id.data
+        book_id = form.book_id.data
+
+        # Create Cursor
+        cur = mysql.connection.cursor()
+
+        # Execute
+        cur.execute("INSERT INTO transactions( student_id, staff_id, book_id) VALUES(%d, %d, %d)",(student_id, staff_id, book_id))#, session['username']))
+
+        # Commit to MySQL
+        mysql.connection.commit()
+
+        # Close connection
+        cur.close()
+
+        flash('Book Issued', 'success')
+
+        return redirect(url_for('bookslist'))
+
+    return render_template('issue_books.html', form= form)
 
 # Creating the Hospital List
 @app.route('/hospitallist')

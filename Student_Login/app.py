@@ -118,7 +118,7 @@ def is_logged_in(f):
             return redirect(url_for('login'))
     return wrap
 
-# Creating the hospital list
+# Creating the Books list
 @app.route('/bookslist')
 # @is_logged_in
 def bookslist():
