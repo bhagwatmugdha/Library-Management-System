@@ -22,7 +22,7 @@ def about():
 # Register Form Class
 class RegisterForm(Form):
     studentName = StringField("Student Name", [validators.Length(min=1, max=100)])
-    username = StringField('Username- Student ID number', [validators.Length(min=1, max=25)])
+    studentUsername = StringField('Username- Student ID number', [validators.Length(min=1, max=25)])
     email = StringField('Email', [validators.Length(min=1, max=50)])
     mobile = StringField("Mobile Number", [validators.Length(min=12, max=12)])
     password = PasswordField('Password', [
@@ -39,14 +39,14 @@ def register():
             studentName = form.studentName.data
             email = form.email.data
             mobile = form.mobile.data
-            username = form.username.data
+            studentUsername = form.studentUsername.data
             password = sha256_crypt.encrypt(str(form.password.data))
 
             # Creating the cursor
             cur = mysql.connection.cursor()
 
             # Executing Query
-            cur.execute("INSERT INTO students(studentName, email, mobile, username, password) VALUES(%s, %s, %s, %s, %s)", (studentName, email, mobile, username, password))
+            cur.execute("INSERT INTO students(studentName, email, mobile, studentUsername, password) VALUES(%s, %s, %s, %s, %s)", (studentName, email, mobile, studentUsername, password))
 
 
             # Commit to database
@@ -67,14 +67,14 @@ def login():
     if request.method == 'POST':
 
         #Get form fields
-        username = request.form['username']
+        studentUsername = request.form['studentUsername']
         password_candidate = request.form['password']
 
         # Create Cursor
         cur = mysql.connection.cursor()
 
         # Get user by Username
-        result = cur.execute("SELECT * FROM students WHERE username = %s", [username])
+        result = cur.execute("SELECT * FROM students WHERE studentUsername = %s", [studentUsername])
 
         if result > 0:
 
@@ -88,7 +88,7 @@ def login():
 
                 # Password matched
                 session['logged_in'] = True
-                session['username'] = username
+                session['studentUsername'] = studentUsername
                 # session['aadharNo'] = data['aadharNo']
 
                 flash('You have successfully logged in', 'success')
@@ -139,6 +139,29 @@ def bookslist():
 
     # Close connection
     cur.close()
+
+# Personal Details
+@app.route('/student_detail')
+@is_logged_in
+def student_detail():
+
+    # Create Cursor
+    cur = mysql.connection.cursor()
+
+    # Execute
+    result = cur.execute("SELECT * FROM transactions WHERE studentUsername = %s", (session['studentUsername'], )) #NATURAL JOIN hospital WHERE aadharNo= %s ORDER BY date_of_test desc", (session['aadharNo'],))
+
+    transactions = cur.fetchall()
+
+    if result > 0:
+        return render_template('student_detail.html', transactions = transactions)
+    else:
+        msg = 'No recorded transactions'
+        return render_template('student_detail.html', msg= msg)
+
+    # Close connection
+    cur.close()
+
 
 # Creating the Report list
 @app.route('/detail')

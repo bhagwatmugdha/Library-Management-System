@@ -27,10 +27,10 @@ CREATE TABLE `students` (
   `studentName` varchar(100) DEFAULT NULL,
   `email` varchar(100) DEFAULT NULL,
   `mobile` varchar(12) DEFAULT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `studentUsername` varchar(100) DEFAULT NULL,
   `password` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Mugdha Sharad Bhagwat','mugdhabhagwat9@gmail.com','918452050048','161071050','$5$rounds=535000$7HYXQ7tb0Hh5c0ch$Rrz8xAOu35OPQ5t3dqu3bIf5MTtc2/8RUyJiisIQnU1');
+INSERT INTO `students` (`student_id`, `studentName`, `email`, `mobile`, `studentUsername`, `password`) VALUES (1,'Mugdha Sharad Bhagwat','mugdhabhagwat9@gmail.com','918452050048','161071050','$5$rounds=535000$7HYXQ7tb0Hh5c0ch$Rrz8xAOu35OPQ5t3dqu3bIf5MTtc2/8RUyJiisIQnU1'),(2,'Prachiti Parkar','prachitiparkar98@gmail.com','919820181792','161071059','$5$rounds=535000$qOXv5mCidlOhOcKq$ZM4cQDNHMTXn9N6v8087ZM8xIe1xUxVy0rpHaD7OMbA');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-11 10:27:39
+-- Dump completed on 2018-10-13 18:18:35

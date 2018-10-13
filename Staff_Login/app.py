@@ -22,7 +22,7 @@ def about():
 # Register Form Class
 class RegisterForm(Form):
     staffName = StringField("Name", [validators.Length(min=1, max=100)])
-    username = StringField('Username', [validators.Length(min=1, max=100)])
+    staffUsername = StringField('Staff Username', [validators.Length(min=1, max=100)])
     password = PasswordField('Password', [
         validators.DataRequired(),
         validators.EqualTo('confirm', message='Passwords do not match')
@@ -35,14 +35,14 @@ def register():
         form = RegisterForm(request.form)
         if request.method == 'POST' and form.validate():
             staffName = form.staffName.data
-            username = form.username.data
+            staffUsername = form.staffUsername.data
             password = sha256_crypt.encrypt(str(form.password.data))
 
             # Creating the cursor
             cur = mysql.connection.cursor()
 
             # Executing Query
-            cur.execute("INSERT INTO staff( staffName, username, password) VALUES(%s, %s, %s)", (staffName, username, password))
+            cur.execute("INSERT INTO staff( staffName, staffUsername, password) VALUES(%s, %s, %s)", (staffName, staffUsername, password))
 
             # Commit to database
             mysql.connection.commit()
@@ -62,14 +62,14 @@ def login():
     if request.method == 'POST':
 
         #Get form fields
-        username = request.form['username']
+        staffUsername = request.form['staffUsername']
         password_candidate = request.form['password']
 
         # Create Cursor
         cur = mysql.connection.cursor()
 
         # Get user by Username
-        result = cur.execute("SELECT * FROM staff WHERE username = %s", [username])
+        result = cur.execute("SELECT * FROM staff WHERE staffUsername = %s", [staffUsername])
 
         if result > 0:
 
@@ -82,7 +82,7 @@ def login():
 
                 # Password matched
                 session['logged_in'] = True
-                session['username'] = username
+                session['staffUsername'] = staffUsername
 
                 flash('You have successfully logged in', 'success')
                 return redirect(url_for('bookslist'))
@@ -134,16 +134,16 @@ def bookslist():
     cur.close()
 
 # Report Form Class
-class ReportForm(Form):
-    student_id = StringField("Student ID", [validators.Length(min=1)])
-    staff_id = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
-    book_id = StringField("Book ID")
+class IssueForm(Form):
+    bookName = StringField("Name of the book to be issued")    
+    studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
+    staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
 
 # Add Report Form
 @app.route('/issue_books', methods=['GET', 'POST'])
 @is_logged_in
 def issue_books():
-    form = ReportForm(request.form)
+    form = IssueForm(request.form)
 
     if request.method == 'POST' and form.validate():
         student_id = form.student_id.data

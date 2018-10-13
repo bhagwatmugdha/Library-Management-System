@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `staff`;
 CREATE TABLE `staff` (
   `staff_id` int(11) NOT NULL AUTO_INCREMENT,
   `staffName` varchar(100) DEFAULT NULL,
-  `username` varchar(100) DEFAULT NULL,
+  `staffUsername` varchar(100) DEFAULT NULL,
   `password` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`staff_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
@@ -37,7 +37,7 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES (1,'Shubhada Bhagwat','171071050','$5$rounds=535000$OdQuyetRelFNdI3r$Tg1Hn.6.tLAZ4ow6tQMYGcCYogOkZQdF75PWPQDatx.');
+INSERT INTO `staff` (`staff_id`, `staffName`, `staffUsername`, `password`) VALUES (1,'Shubhada Bhagwat','171071050','$5$rounds=535000$OdQuyetRelFNdI3r$Tg1Hn.6.tLAZ4ow6tQMYGcCYogOkZQdF75PWPQDatx.');
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-11 10:27:39
+-- Dump completed on 2018-10-13 18:18:35

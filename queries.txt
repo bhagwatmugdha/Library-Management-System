@@ -8,19 +8,19 @@ USE library;
 
 * Create tables *
 
-CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), username VARCHAR(100), password VARCHAR(150) );
+CREATE TABLE staff(staff_id INT AUTO_INCREMENT PRIMARY KEY, staffName VARCHAR(100), staffUsername VARCHAR(100), password VARCHAR(150) );
 
 select * from staff;
 
-CREATE TABLE students(student_id INT PRIMARY KEY AUTO_INCREMENT, studentName VARCHAR(100), email VARCHAR(100),  mobile VARCHAR(12), username VARCHAR(100), password VARCHAR(50));
+CREATE TABLE students(student_id INT PRIMARY KEY AUTO_INCREMENT, studentName VARCHAR(100), email VARCHAR(100),  mobile VARCHAR(12), studentUsername VARCHAR(100), password VARCHAR(50));
 
 select * from students;
 
-CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100), addedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100), addedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, available BOOL DEFAULT 1);
 
 select * from books;
 
-CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, student_id INT, staff_id INT, book_id INT, issueDate DATETIME, returnDate DATETIEM);
+CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, studentUsername VARCHAR(100), staffUsername VARCHAR(100), bookName VARCHAR(100), issueDate DATETIME, returnDate DATETIME, fine INT DEFAULT 0);
 
 select * from transactions;
 
