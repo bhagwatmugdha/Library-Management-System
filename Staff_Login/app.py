@@ -6,7 +6,7 @@ from functools import wraps
 
 app = Flask(__name__)
 
-app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
+app.config.from_pyfile('/home/prachiti/Desktop/proj/LibraryManagement/Library-Management-System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -135,7 +135,7 @@ def bookslist():
 
 # Report Form Class
 class IssueForm(Form):
-    bookName = StringField("Name of the book to be issued")    
+    bookid = StringField("ID of the book to be issued")    
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
     staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
 
@@ -146,15 +146,15 @@ def issue_books():
     form = IssueForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        student_id = form.student_id.data
-        staff_id  = form.staff_id.data
-        book_id = form.book_id.data
+        student_id = form.studentUsername.data
+        staff_id  = form.staffUsername.data
+        book_id = form.bookid.data
 
         # Create Cursor
         cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("INSERT INTO transactions( student_id, staff_id, book_id) VALUES(%d, %d, %d)",(student_id, staff_id, book_id))#, session['username']))
+        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, bookName) VALUES(%s, %s, %s)",(student_id, staff_id, book_id))#, session['username']))
 
         # Commit to MySQL
         mysql.connection.commit()
@@ -167,6 +167,44 @@ def issue_books():
         return redirect(url_for('bookslist'))
 
     return render_template('issue_books.html', form= form)
+
+
+class GetUsernameForm(Form):
+    studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
+    amountpaid= StringField("Student ID number")
+
+
+
+    
+@app.route('/pay_fine',methods=['GET','POST'])
+@is_logged_in
+def pay_fine():
+    form=GetUsernameForm(request.form)
+    data=0
+    newfine=0
+    
+    if request.method == 'POST' and form.validate():
+        student_id = form.studentUsername.data
+        cur = mysql.connection.cursor()
+        cur.execute("select fine from transactions where studentUsername="+str(student_id)+"  ")
+        data=cur.fetchone()
+        amountpaid= form.amountpaid.data
+        if amountpaid and int(data['fine'])>0:
+            
+            originalfine=int(data['fine'])
+            newfine=0
+            newfine=originalfine-int(amountpaid)
+            print(newfine)
+            cur.execute("update transactions set fine="+str(newfine)+" where studentUsername="+str(student_id)+" ")
+            
+            
+            mysql.connection.commit()
+
+            flash('Amount was paid','success')
+
+
+        
+    return render_template('pay_fine.html',form=form,data=data,newfine=newfine)
 
 # Creating the Hospital List
 @app.route('/hospitallist')
