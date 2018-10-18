@@ -9,7 +9,7 @@ from datetime import timedelta
 
 app = Flask(__name__)
 
-app.config.from_pyfile('/home/prachiti/Desktop/proj/LibraryManagement/Library-Management-System/config.py')
+app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
