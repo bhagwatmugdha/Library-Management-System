@@ -18,10 +18,10 @@
 
         <div class="col-md-4">
           <div class="row">
-            <img src= "images/analyse.jpeg" class="center">
+            <img src= "https://elearningindustry.com/wp-content/uploads/2014/04/6-key-questions-to-effectively-analyze-your-elearning-course-audiences-1.jpg" width="250" height= "185"class="center">
           </div>
           <div class="row">
-            <a href="/check_fine" >Analyse</a>
+            <a href="/check_fine" >Click here to view detailed Analysis</a>
           </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
   
   <hr>
   <!-- <a class="btn btn-success" href="/issue_books"> Issue books </a> -->
-  <a class="btn btn-success" href="/return_books"> Return books </a>
+  <!-- <a class="btn btn-success" href="/return_books"> Return books </a> -->
   <table class="table table-hover table-stripped">
     <tr>
       <th>Book Name</th>
@@ -45,7 +45,7 @@
         <td>{{book.count}}</td>
         <td> {{book.available}} </td>
         {% if book.available > 0 %}
-          <td><a class="btn btn-success" href="/issue_books"> Issue books </a></td>
+          <td><a class="btn btn-success" href="issue_books/{{book.bookName}}"> Issue book </a></td>
         {% else %}
           <td>  </td>
         {% endif%}

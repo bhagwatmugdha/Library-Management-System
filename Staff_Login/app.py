@@ -138,32 +138,40 @@ def bookslist():
 
 # Report Form Class
 class IssueForm(Form):
-    bookid = StringField("ID of the book to be issued")    
+    bookName = StringField("Name of the book to be issued")    
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
     staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
 
 # Add Report Form
-@app.route('/issue_books', methods=['GET', 'POST'])
+@app.route('/issue_books/<string:bookName>', methods=['GET', 'POST'])
 @is_logged_in
-def issue_books():
+def issue_books(bookName):
+    # Create Cursor
+    cur = mysql.connection.cursor()
+
+    result = cur.execute("SELECT * FROM books WHERE bookName = %s AND available = 1 LIMIT 1", [bookName])
+
+    book = cur.fetchone()
+
+    #Get form
     form = IssueForm(request.form)
+
+    #Populate form
+    form.bookName.data = bookName
 
     if request.method == 'POST' and form.validate():
         student_id = form.studentUsername.data
         staff_id  = form.staffUsername.data
-        book_id = form.bookid.data
+        bookName = form.bookName.data
 
-        # Create Cursor
-        cur = mysql.connection.cursor()
+        
 
         # Execute
-        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, book_id) VALUES(%s, %s, %s)",(student_id, staff_id, book_id))#, session['username']))
-
+        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, bookName, book_id) VALUES(%s, %s, %s, %s)",(student_id, staff_id, bookName, book['book_id']))#, session['username']))
+        cur.execute("UPDATE books SET available = 0 WHERE book_id = "+str(book['book_id'])+"")
         # Commit to MySQL
         mysql.connection.commit()
 
-        cur.execute("update books set available = 0 where book_id = "+str(book_id)+"  ")
-        mysql.connection.commit()
         # Close connection
         cur.close()
 
