@@ -40,6 +40,14 @@ LOCK TABLES `books` WRITE;
 INSERT INTO `books` VALUES (1,'H C Verma','2018-10-14 10:57:51',0),(2,'Networking Systems by Tannenbaum','2018-10-18 07:26:21',1),(3,'Software Engineering by Pressman','2018-10-18 07:26:43',1),(4,'AI by Deepak Khimani','2018-10-18 07:27:06',1);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'library'
+--
+
+--
+-- Dumping routines for database 'library'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -50,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-18 18:11:41
+-- Dump completed on 2018-10-18 18:46:20

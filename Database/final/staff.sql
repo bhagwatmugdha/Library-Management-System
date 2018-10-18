@@ -16,32 +16,38 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `students`
+-- Table structure for table `staff`
 --
 
-DROP TABLE IF EXISTS `students`;
+DROP TABLE IF EXISTS `staff`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `students` (
-  `student_id` int(11) NOT NULL AUTO_INCREMENT,
-  `studentName` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `mobile` varchar(12) DEFAULT NULL,
-  `studentUsername` varchar(100) DEFAULT NULL,
+CREATE TABLE `staff` (
+  `staff_id` int(11) NOT NULL AUTO_INCREMENT,
+  `staffName` varchar(100) DEFAULT NULL,
+  `staffUsername` varchar(100) DEFAULT NULL,
   `password` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`student_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`staff_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `students`
+-- Dumping data for table `staff`
 --
 
-LOCK TABLES `students` WRITE;
-/*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Mugdha Sharad Bhagwat','mugdhabhagwat9@gmail.com','918452050048','161071050','$5$rounds=535000$7HYXQ7tb0Hh5c0ch$Rrz8xAOu35OPQ5t3dqu3bIf5MTtc2/8RUyJiisIQnU1'),(2,'Prachiti Parkar','prachitiparkar98@gmail.com','919820181792','161071059','$5$rounds=535000$qOXv5mCidlOhOcKq$ZM4cQDNHMTXn9N6v8087ZM8xIe1xUxVy0rpHaD7OMbA'),(3,'Sohan','sohan@gmail.com','918082426264','1610700000','$5$rounds=535000$uksgm8jljb2KdXEN$Cy3Aim65hlO3LJSgkcFcwxuzNaSuDDcES3gemTWx0W.');
-/*!40000 ALTER TABLE `students` ENABLE KEYS */;
+LOCK TABLES `staff` WRITE;
+/*!40000 ALTER TABLE `staff` DISABLE KEYS */;
+INSERT INTO `staff` VALUES (1,'Shubhada Bhagwat','171071050','$5$rounds=535000$OdQuyetRelFNdI3r$Tg1Hn.6.tLAZ4ow6tQMYGcCYogOkZQdF75PWPQDatx.'),(2,'Shraddha','151071059','$5$rounds=535000$nkqOS.9YI4z8t3uA$yi6fl0IkFf3dbWSOrAIdoNvoFUaQF9ZvjmM0QmkaQt6');
+/*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'library'
+--
+
+--
+-- Dumping routines for database 'library'
+--
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -52,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-18 18:11:41
+-- Dump completed on 2018-10-18 18:46:50
