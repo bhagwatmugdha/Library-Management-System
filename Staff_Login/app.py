@@ -120,7 +120,7 @@ def bookslist():
     cur = mysql.connection.cursor()
 
     # Execute
-    result = cur.execute("SELECT bookName, count(bookName) AS count FROM books GROUP BY bookName")
+    result = cur.execute("SELECT bookName, count(bookName) AS count FROM books where available <> 0 GROUP BY bookName")
 
     books = cur.fetchall()
 
@@ -154,11 +154,13 @@ def issue_books():
         cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, bookName) VALUES(%s, %s, %s)",(student_id, staff_id, book_id))#, session['username']))
+        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, book_id) VALUES(%s, %s, %s)",(student_id, staff_id, book_id))#, session['username']))
 
         # Commit to MySQL
         mysql.connection.commit()
 
+        cur.execute("update books set available = 0 where book_id = "+str(book_id)+" ")
+        mysql.connection.commit()
         # Close connection
         cur.close()
 
@@ -167,6 +169,31 @@ def issue_books():
         return redirect(url_for('bookslist'))
 
     return render_template('issue_books.html', form= form)
+
+class ReturnForm(Form):
+    bookid = StringField("ID of the book to be returned")    
+    studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
+    staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
+
+@app.route('/return_books',methods=['GET','POST'])
+@is_logged_in
+def return_books():
+    form=ReturnForm(request.form)
+    if request.method == 'POST' and form.validate():
+        student_id = form.studentUsername.data
+        staff_id  = form.staffUsername.data
+        book_id = form.bookid.data
+
+        cur = mysql.connection.cursor()
+        cur.execute("update books set available = 1 where book_id = "+str(book_id)+" ")
+        mysql.connection.commit()
+        cur.close()
+
+        flash('Book Returned', 'success')
+        return redirect(url_for('bookslist'))
+
+    return render_template('return_books.html', form= form)
+
 
 
 class GetUsernameForm(Form):

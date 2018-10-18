@@ -1,0 +1,3 @@
+staff username should start with 15 and should be of 10 digits
+student username should start with 16 or 17 or 18 and should be of 10 digits
+book_id is an int starts from 1
