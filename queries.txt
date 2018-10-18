@@ -34,4 +34,4 @@ FOR EACH ROW SET
 
 INSERT INTO books VALUES(bookName)(("Introduction to Operating Systems")("Introduction to Operating Systems"));
 
-INSERT INTO transactions(student_id, staff_id, book_id) VALUES(1, 1, 1);
+// INSERT INTO transactions(student_id, staff_id, book_id) VALUES(1, 1, 1);
