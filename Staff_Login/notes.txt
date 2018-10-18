@@ -1,0 +1,9 @@
+*Prachiti*
+staff username should start with 15 and should be of 10 digits eg:151071059 1234
+student username should start with 16 or 17 or 18 and should be of 10 digits eg:1610700000 0809
+book_id is an int starts from 1
+Done column added in transactions 
+	if transaction is completed then 1 else 0
+
+Right now Fine status:
+	fine added is difference_in_dates *10 if today'sdate > returndate

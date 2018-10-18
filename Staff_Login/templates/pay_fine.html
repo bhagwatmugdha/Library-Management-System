@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+  <h1>Pay Fine</h1>
+
+  {% from "includes/_formhelpers.html" import render_field %}
+
+  <form method="POST" action="">
+    <div class="form-group">
+      {{render_field(form.studentUsername, class_="form-control")}}
+    </div>
+    <div>
+      Click here to know student's pending amount<br>
+      <input type="submit" class="btn btn-primary"  value="Pending Fine">
+      <br>
+      Student has a pending of Rs.{{data.fine}} <br>
+      <br>
+  
+      Enter the amount paid by the student
+      {{render_field(form.amountpaid, class_="form-control")}}
+      <input type="submit" class="btn btn-primary"  value="Pay Fine">
+    </div>
+  </form>
+  <div>
+  Student paid a fine of Rs.{{newfine}} 
+  </div>
+  
+{% endblock %}

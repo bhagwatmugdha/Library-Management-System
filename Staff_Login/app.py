@@ -3,10 +3,13 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+import datetime
+import time
+from datetime import timedelta
 
 app = Flask(__name__)
 
-app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
+app.config.from_pyfile('/home/prachiti/Desktop/proj/LibraryManagement/Library-Management-System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -120,7 +123,7 @@ def bookslist():
     cur = mysql.connection.cursor()
 
     # Execute
-    result = cur.execute("SELECT bookName, count(bookName) AS count FROM books GROUP BY bookName")
+    result = cur.execute("SELECT bookName, count(bookName) AS count FROM books where available <> 0 GROUP BY bookName")
 
     books = cur.fetchall()
 
@@ -135,7 +138,7 @@ def bookslist():
 
 # Report Form Class
 class IssueForm(Form):
-    bookName = StringField("Name of the book to be issued")    
+    bookid = StringField("ID of the book to be issued")    
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
     staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
 
@@ -146,19 +149,21 @@ def issue_books():
     form = IssueForm(request.form)
 
     if request.method == 'POST' and form.validate():
-        student_id = form.student_id.data
-        staff_id  = form.staff_id.data
-        book_id = form.book_id.data
+        student_id = form.studentUsername.data
+        staff_id  = form.staffUsername.data
+        book_id = form.bookid.data
 
         # Create Cursor
         cur = mysql.connection.cursor()
 
         # Execute
-        cur.execute("INSERT INTO transactions( student_id, staff_id, book_id) VALUES(%d, %d, %d)",(student_id, staff_id, book_id))#, session['username']))
+        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, book_id) VALUES(%s, %s, %s)",(student_id, staff_id, book_id))#, session['username']))
 
         # Commit to MySQL
         mysql.connection.commit()
 
+        cur.execute("update books set available = 0 where book_id = "+str(book_id)+"  ")
+        mysql.connection.commit()
         # Close connection
         cur.close()
 
@@ -167,6 +172,115 @@ def issue_books():
         return redirect(url_for('bookslist'))
 
     return render_template('issue_books.html', form= form)
+
+class ReturnForm(Form):
+    bookid = StringField("ID of the book to be returned")    
+    studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
+    staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
+
+@app.route('/return_books',methods=['GET','POST'])
+@is_logged_in
+def return_books():
+    form=ReturnForm(request.form)
+    if request.method == 'POST' and form.validate():
+        student_id = form.studentUsername.data
+        staff_id  = form.staffUsername.data
+        book_id = form.bookid.data
+
+        cur = mysql.connection.cursor()
+        cur.execute("update books set available = 1 where book_id = "+str(book_id)+" ")
+
+        mysql.connection.commit()
+        cur.execute("update transactions set Done = 1 where book_id = "+str(book_id)+" and studentUsername= "+str(student_id)+" ")
+
+        mysql.connection.commit()
+        cur.execute("select returnDate from transactions where studentUsername = "+str(student_id)+" and book_id= "+str(book_id)+" ")
+        data=cur.fetchone()
+
+        returndate=str(data['returnDate'])
+        current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
+        
+        if current_time>returndate :
+            returndate=time.strftime(returndate)
+
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+    - datetime.datetime.strptime(returndate, datetimeFormat)
+            amount_to_be_added_to_fine=(diff.days)*10
+
+            cur.execute("update transactions set fine=fine+ "+str(amount_to_be_added_to_fine)+" studentUsername= "+str(student_id)+"  ")
+            mysql.connection.commit()
+
+        else :
+            returndate=time.strftime(returndate)
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+    - datetime.datetime.strptime(returndate, datetimeFormat)
+            #should be negative
+            print(diff.days)
+
+        cur.close()
+
+        flash('Book Returned', 'success')
+        return redirect(url_for('bookslist'))
+
+    return render_template('return_books.html', form= form)
+
+
+
+class GetUsernameForm(Form):
+    studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
+    amountpaid= StringField("Student ID number")
+
+@app.route('/check_fine',methods=['GET','POST'])
+@is_logged_in
+def check_fine():
+    cur = mysql.connection.cursor()
+
+    # Execute
+    result = cur.execute("SELECT studentUsername, fine  FROM transactions where fine > 0 GROUP BY studentusername,fine")
+
+    books = cur.fetchall()
+
+    if result > 0:
+        return render_template('check_fine.html', books = books)
+    else:
+        msg = 'No books found'
+        return render_template('check_fine.html', msg= msg)
+
+    # Close connection
+    cur.close()
+
+    
+@app.route('/pay_fine',methods=['GET','POST'])
+@is_logged_in
+def pay_fine():
+    form=GetUsernameForm(request.form)
+    data=0
+    newfine=0
+    
+    if request.method == 'POST' and form.validate():
+        student_id = form.studentUsername.data
+        cur = mysql.connection.cursor()
+        cur.execute("select fine from transactions where studentUsername="+str(student_id)+"  ")
+        data=cur.fetchone()
+        amountpaid= form.amountpaid.data
+        if amountpaid and int(data['fine'])>0:
+            
+            originalfine=int(data['fine'])
+            newfine=0
+            newfine=originalfine-int(amountpaid)
+            print(newfine)
+            cur.execute("update transactions set fine="+str(newfine)+" where studentUsername="+str(student_id)+" ")
+            
+            
+            mysql.connection.commit()
+
+            flash('Amount was paid','success')
+
+
+        
+    return render_template('pay_fine.html',form=form,data=data,newfine=newfine)
 
 # Creating the Hospital List
 @app.route('/hospitallist')

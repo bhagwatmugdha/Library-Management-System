@@ -1,9 +1,36 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Books List </h1>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-4">
+          <h1>Books List </h1>
+        </div>
+
+        <div class="col-md-4">
+          <div class="row">
+             <img src= "images/fine.png" class="center" > 
+          </div>
+          <div>
+             <a href="/check_fine" >Click here to check outstanding fines </a>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="row">
+            <img src= "images/analyse.jpeg" class="center">
+          </div>
+          <div class="row">
+            <a href="/check_fine" >Analyse</a>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  
   <hr>
   <a class="btn btn-success" href="/issue_books"> Issue books </a>
+  <a class="btn btn-success" href="/return_books"> Return books </a>
   <table class="table table-hover table-stripped">
     <tr>
       <th>Book Name</th>
