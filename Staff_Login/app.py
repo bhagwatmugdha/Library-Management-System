@@ -123,7 +123,7 @@ def bookslist():
     cur = mysql.connection.cursor()
 
     # Execute
-    result = cur.execute("SELECT bookName, count(bookName) AS count FROM books where available <> 0 GROUP BY bookName")
+    result = cur.execute("SELECT bookName, count(bookName) AS count, sum(available) as available FROM books GROUP BY bookName") #where available <> 0
 
     books = cur.fetchall()
 

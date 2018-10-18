@@ -20,7 +20,7 @@ CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100)
 
 select * from books;
 
-CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, studentUsername VARCHAR(100), staffUsername VARCHAR(100), bookName VARCHAR(100), issueDate DATETIME, returnDate DATETIME, fine INT DEFAULT 0);
+CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, studentUsername VARCHAR(100), staffUsername VARCHAR(100), bookName VARCHAR(100), issueDate DATETIME, returnDate DATETIME, fine INT DEFAULT 0, done );
 
 select * from transactions;
 
