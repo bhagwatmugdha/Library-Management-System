@@ -3,6 +3,9 @@ from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
+import datetime
+import time
+from datetime import timedelta
 
 app = Flask(__name__)
 
@@ -186,7 +189,36 @@ def return_books():
 
         cur = mysql.connection.cursor()
         cur.execute("update books set available = 1 where book_id = "+str(book_id)+" ")
+
         mysql.connection.commit()
+        cur.execute("update transactions set Done = 1 where book_id = "+str(book_id)+" and studentUsername= "+str(student_id)+" ")
+
+        mysql.connection.commit()
+        cur.execute("select returnDate from transactions where studentUsername = "+str(student_id)+" and book_id= "+str(book_id)+" ")
+        data=cur.fetchone()
+
+        returndate=str(data['returnDate'])
+        current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
+        
+        if current_time>returndate :
+            returndate=time.strftime(returndate)
+
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+    - datetime.datetime.strptime(returndate, datetimeFormat)
+            amount_to_be_added_to_fine=(diff.days)*10
+
+            cur.execute("update transactions set fine=fine+ "+str(amount_to_be_added_to_fine)+" studentUsername= "+str(student_id)+" and book_id = "+str(book_id)+" ")
+            mysql.connection.commit()
+
+        else :
+            returndate=time.strftime(returndate)
+            datetimeFormat = '%Y-%m-%d %H:%M:%S'
+            diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+    - datetime.datetime.strptime(returndate, datetimeFormat)
+            #should be negative
+            print(diff.days)
+
         cur.close()
 
         flash('Book Returned', 'success')
