@@ -37,17 +37,9 @@ CREATE TABLE `staff` (
 
 LOCK TABLES `staff` WRITE;
 /*!40000 ALTER TABLE `staff` DISABLE KEYS */;
-INSERT INTO `staff` VALUES (1,'Shubhada Bhagwat','171071050','$5$rounds=535000$OdQuyetRelFNdI3r$Tg1Hn.6.tLAZ4ow6tQMYGcCYogOkZQdF75PWPQDatx.'),(2,'Shraddha','151071059','$5$rounds=535000$nkqOS.9YI4z8t3uA$yi6fl0IkFf3dbWSOrAIdoNvoFUaQF9ZvjmM0QmkaQt6');
+INSERT INTO `staff` (`staff_id`, `staffName`, `staffUsername`, `password`) VALUES (1,'Shubhada Bhagwat','171071050','$5$rounds=535000$OdQuyetRelFNdI3r$Tg1Hn.6.tLAZ4ow6tQMYGcCYogOkZQdF75PWPQDatx.'),(2,'Shraddha','151071059','$5$rounds=535000$nkqOS.9YI4z8t3uA$yi6fl0IkFf3dbWSOrAIdoNvoFUaQF9ZvjmM0QmkaQt6');
 /*!40000 ALTER TABLE `staff` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'library'
---
-
---
--- Dumping routines for database 'library'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -58,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-18 18:46:50
+-- Dump completed on 2018-10-18 22:54:04

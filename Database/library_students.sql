@@ -39,17 +39,9 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES (1,'Mugdha Sharad Bhagwat','mugdhabhagwat9@gmail.com','918452050048','161071050','$5$rounds=535000$7HYXQ7tb0Hh5c0ch$Rrz8xAOu35OPQ5t3dqu3bIf5MTtc2/8RUyJiisIQnU1'),(2,'Prachiti Parkar','prachitiparkar98@gmail.com','919820181792','161071059','$5$rounds=535000$qOXv5mCidlOhOcKq$ZM4cQDNHMTXn9N6v8087ZM8xIe1xUxVy0rpHaD7OMbA'),(3,'Sohan','sohan@gmail.com','918082426264','1610700000','$5$rounds=535000$uksgm8jljb2KdXEN$Cy3Aim65hlO3LJSgkcFcwxuzNaSuDDcES3gemTWx0W.');
+INSERT INTO `students` (`student_id`, `studentName`, `email`, `mobile`, `studentUsername`, `password`) VALUES (1,'Mugdha Sharad Bhagwat','mugdhabhagwat9@gmail.com','918452050048','161071050','$5$rounds=535000$7HYXQ7tb0Hh5c0ch$Rrz8xAOu35OPQ5t3dqu3bIf5MTtc2/8RUyJiisIQnU1'),(2,'Prachiti Parkar','prachitiparkar98@gmail.com','919820181792','161071059','$5$rounds=535000$qOXv5mCidlOhOcKq$ZM4cQDNHMTXn9N6v8087ZM8xIe1xUxVy0rpHaD7OMbA'),(3,'Sohan','sohan@gmail.com','918082426264','1610700000','$5$rounds=535000$uksgm8jljb2KdXEN$Cy3Aim65hlO3LJSgkcFcwxuzNaSuDDcES3gemTWx0W.');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'library'
---
-
---
--- Dumping routines for database 'library'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -60,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-18 18:47:20
+-- Dump completed on 2018-10-18 22:54:04
