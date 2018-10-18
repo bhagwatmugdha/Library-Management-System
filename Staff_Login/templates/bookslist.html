@@ -1,7 +1,20 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Books List </h1>
+  <div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h1>Books List </h1>
+    </div>
+    <div class="col-md-6">
+    <img src="fine.png" >
+    <a href="/check_fine" >Click here to check outstanding fines </a>
+
+    </div>
+  </div>
+  <div>
+
+  </div>
   <hr>
   <a class="btn btn-success" href="/issue_books"> Issue books </a>
   <a class="btn btn-success" href="/return_books"> Return books </a>

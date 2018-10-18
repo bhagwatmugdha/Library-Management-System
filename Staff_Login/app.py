@@ -162,7 +162,7 @@ def issue_books():
         # Commit to MySQL
         mysql.connection.commit()
 
-        cur.execute("update books set available = 0 where book_id = "+str(book_id)+" ")
+        cur.execute("update books set available = 0 where book_id = "+str(book_id)+"  ")
         mysql.connection.commit()
         # Close connection
         cur.close()
@@ -208,7 +208,7 @@ def return_books():
     - datetime.datetime.strptime(returndate, datetimeFormat)
             amount_to_be_added_to_fine=(diff.days)*10
 
-            cur.execute("update transactions set fine=fine+ "+str(amount_to_be_added_to_fine)+" studentUsername= "+str(student_id)+" and book_id = "+str(book_id)+" ")
+            cur.execute("update transactions set fine=fine+ "+str(amount_to_be_added_to_fine)+" studentUsername= "+str(student_id)+"  ")
             mysql.connection.commit()
 
         else :
@@ -232,7 +232,24 @@ class GetUsernameForm(Form):
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
     amountpaid= StringField("Student ID number")
 
+@app.route('/check_fine',methods=['GET','POST'])
+@is_logged_in
+def check_fine():
+    cur = mysql.connection.cursor()
 
+    # Execute
+    result = cur.execute("SELECT studentUsername, fine  FROM transactions where fine > 0 GROUP BY studentusername,fine")
+
+    books = cur.fetchall()
+
+    if result > 0:
+        return render_template('check_fine.html', books = books)
+    else:
+        msg = 'No books found'
+        return render_template('check_fine.html', msg= msg)
+
+    # Close connection
+    cur.close()
 
     
 @app.route('/pay_fine',methods=['GET','POST'])
