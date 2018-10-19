@@ -26,12 +26,16 @@ CREATE TABLE `transactions` (
   `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
   `studentUsername` varchar(100) DEFAULT NULL,
   `staffUsername` varchar(100) DEFAULT NULL,
-  `bookName` varchar(100) DEFAULT NULL,
+  `book_id` int(11) DEFAULT NULL,
   `issueDate` datetime DEFAULT NULL,
   `returnDate` datetime DEFAULT NULL,
   `fine` int(11) DEFAULT '0',
-  PRIMARY KEY (`transaction_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+  `Done` int(11) DEFAULT '0',
+  `bookName` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`transaction_id`),
+  KEY `book_id` (`book_id`),
+  CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`book_id`) REFERENCES `books` (`book_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +44,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` (`transaction_id`, `studentUsername`, `staffUsername`, `bookName`, `issueDate`, `returnDate`, `fine`) VALUES (1,'161071050','171071050','Introduction to Operating Systems','2018-10-11 22:06:47','2018-10-18 22:06:47',0);
+INSERT INTO `transactions` (`transaction_id`, `studentUsername`, `staffUsername`, `book_id`, `issueDate`, `returnDate`, `fine`, `Done`, `bookName`) VALUES (12,'161070000','171070050',7,'2018-10-18 22:21:03','2018-10-25 22:21:03',0,1,'newTest'),(16,'161070000','171070050',7,'2018-10-18 22:31:39','2018-10-25 22:31:39',0,1,'newTest'),(17,'161070000','171070050',2,'2018-10-18 22:31:48','2018-10-25 22:31:48',90,0,'Networking Systems by Tannenbaum'),(18,'161070000','shubhada',4,'2018-10-18 22:31:56','2018-10-25 22:31:56',90,0,'AI by Deepak Khimani'),(19,'161070000','shubhada',3,'2018-10-18 22:32:05','2018-10-25 22:32:05',90,0,'Software Engineering by Pressman'),(20,'161070000','171071050',7,'2018-10-18 22:35:11','2018-10-25 22:35:11',0,1,'newTest');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -71,4 +75,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-13 18:18:35
+-- Dump completed on 2018-10-18 22:54:04

@@ -10,19 +10,21 @@
       {{render_field(form.studentUsername, class_="form-control")}}
     </div>
     <div>
-      Click here to know student's pending amount<br>
-      <input type="submit" class="btn btn-primary"  value="Pending Fine">
+      <!-- Click here to know student's pending amount<br> -->
+      <input type="submit" class="btn btn-primary"  value="Calculate Fine">
       <br>
-      Student has a pending of Rs.{{data.fine}} <br>
+      <br>
+      <strong>Student has a pending of Rs.{{data.fine}}</strong> <br>
       <br>
   
       Enter the amount paid by the student
       {{render_field(form.amountpaid, class_="form-control")}}
+      <br>
       <input type="submit" class="btn btn-primary"  value="Pay Fine">
     </div>
   </form>
   <div>
-  Student paid a fine of Rs.{{newfine}} 
+  <strong>Student paid a fine of Rs.{{newfine}} </strong>
   </div>
   
 {% endblock %}

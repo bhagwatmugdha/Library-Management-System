@@ -25,10 +25,11 @@ DROP TABLE IF EXISTS `books`;
 CREATE TABLE `books` (
   `book_id` int(11) NOT NULL AUTO_INCREMENT,
   `bookName` varchar(100) DEFAULT NULL,
+  `author` varchar(150) DEFAULT NULL,
   `addedDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `available` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`book_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +38,7 @@ CREATE TABLE `books` (
 
 LOCK TABLES `books` WRITE;
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
+INSERT INTO `books` (`book_id`, `bookName`, `author`, `addedDate`, `available`) VALUES (1,'H C Verma',NULL,'2018-10-14 10:57:51',0),(2,'Networking Systems by Tannenbaum',NULL,'2018-10-18 07:26:21',0),(3,'Software Engineering by Pressman',NULL,'2018-10-18 07:26:43',0),(4,'AI by Deepak Khimani',NULL,'2018-10-18 07:27:06',0),(5,'newTest',NULL,'2018-10-18 14:01:41',0),(6,'newTest',NULL,'2018-10-18 14:02:00',0),(7,'newTest',NULL,'2018-10-18 16:09:49',1);
 /*!40000 ALTER TABLE `books` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -49,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-13 18:18:35
+-- Dump completed on 2018-10-18 22:54:04
