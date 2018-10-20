@@ -1,32 +1,37 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Return Books</h1>
+  
 
-  {% from "includes/_formhelpers.html" import render_field %}
+  <div class= "bg" >
+    <h1>Return Books</h1>
 
-  <form method="POST" action="">
-    <div class="form-group">
-      {{render_field(form.studentUsername, class_="form-control")}}
-    </div>
-    <label>
-      Enter the Book name to be returned
-    </label>
-    <div class="form-group">
-    <select id = "book_name" name= "book_name" class=" form-control-lg">
-    {% for book in books %}
-      <option>
-        {{book.bookName}}
-      </option>
-    {% endfor %}
-    </select>
-    </div>
+    {% from "includes/_formhelpers.html" import render_field %}
 
-    
-      <input type="submit" class="btn btn-primary" value="Submit">
-    
-  </form>
+    <form method="POST" action="">
+      <div class="form-group">
+        {{render_field(form.studentUsername, class_="form-control")}}
+      </div>
+      <label>
+        Enter the Book name to be returned
+      </label>
+      <div class="form-group">
+      <select id = "book_name" name= "book_name" class=" form-control">
+      {% for book in books %}
+        <option>
+          {{book.bookName}}
+        </option>
+      {% endfor %}
+      </select>
+      </div>
 
-  <a class="btn btn-primary" href="/pay_fine"> Pay Fine </a>
+      
+        <input type="submit" class="btn btn-primary" value="Submit">
+      
+    </form>
+
+    <a class="btn btn-primary" href="/pay_fine"> Pay Fine </a>
+  </div>
+ 
 
 {% endblock %}
