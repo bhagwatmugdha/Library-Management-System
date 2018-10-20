@@ -9,15 +9,22 @@
     <div class="form-group">
       {{render_field(form.studentUsername, class_="form-control")}}
     </div>
+    <label>
+      Enter the Book name to be returned
+    </label>
     <div class="form-group">
-      {{render_field(form.staffUsername, class_="form-control")}}
+    <select id = "book_name" name= "book_name" class=" form-control-lg">
+    {% for book in books %}
+      <option>
+        {{book.bookName}}
+      </option>
+    {% endfor %}
+    </select>
     </div>
-    <div class="form-group">
-      {{render_field(form.bookName, class_="form-control")}}
-    </div>
-    <p>
+
+    
       <input type="submit" class="btn btn-primary" value="Submit">
-    </p>
+    
   </form>
 
   <a class="btn btn-primary" href="/pay_fine"> Pay Fine </a>

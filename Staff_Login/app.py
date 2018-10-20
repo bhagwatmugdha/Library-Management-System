@@ -183,61 +183,73 @@ def issue_books(bookName):
     return render_template('issue_books.html', form= form)
 
 class ReturnForm(Form):
-    bookName = StringField("Name of the book to be returned")    
+    book_name = StringField("Name of the book to be returned")    
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
-    staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
 
 @app.route('/return_books',methods=['GET','POST'])
 @is_logged_in
 def return_books():
-    form=ReturnForm(request.form)
-    if request.method == 'POST' and form.validate():
-        student_id = form.studentUsername.data
-        staff_id  = form.staffUsername.data
-        book_id = form.bookName.data
+    cur_start=mysql.connection.cursor()
+    result=cur_start.execute("select bookName from books where available =1 group by bookName")
+    books=cur_start.fetchall()
+    if result > 0 :
+        form=ReturnForm(request.form)
+        if request.method == 'POST' and form.validate():
+            student_id = form.studentUsername.data
+            book_name = form.book_name.data
 
-        cur = mysql.connection.cursor()
-        # cur.execute("select book_id")
-        # data=cur.fetchone()
-        # book_id=data[book_id]
+            print(book_name)
 
-        cur.execute("update books set available = 1 where book_id = "+str(book_id)+" ")
+            cur = mysql.connection.cursor()
+            result=cur.execute("select book_id from transactions where studentUsername= "+str(student_id)+" and bookName= '"+str(book_name)+"' ")
+            data=cur.fetchone()
+            if result > 0 :
+                book_id=data['book_id']
 
-        mysql.connection.commit()
-        cur.execute("update transactions set Done = 1 where book_id = "+str(book_id)+" and studentUsername= "+str(student_id)+" ")
+                cur.execute("update books set available = 1 where book_id = "+str(book_id)+" ")
 
-        mysql.connection.commit()
-        cur.execute("select returnDate from transactions where studentUsername = "+str(student_id)+" and book_id= "+str(book_id)+" ")
-        data=cur.fetchone()
+                mysql.connection.commit()
+                cur.execute("update transactions set Done = 1  where book_id = "+str(book_id)+" and studentUsername= "+str(student_id)+" ")
 
-        returndate=str(data['returnDate'])
-        current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
-        
-        if current_time>returndate :
-            returndate=time.strftime(returndate)
+                mysql.connection.commit()
 
-            datetimeFormat = '%Y-%m-%d %H:%M:%S'
-            diff = datetime.datetime.strptime(current_time, datetimeFormat)\
-    - datetime.datetime.strptime(returndate, datetimeFormat)
-            amount_to_be_added_to_fine=(diff.days)*10
+                cur.execute("select returnDate from transactions where studentUsername = "+str(student_id)+" and book_id= "+str(book_id)+" ")
+                data=cur.fetchone()
 
-            cur.execute("update transactions set fine=fine+ "+str(amount_to_be_added_to_fine)+" studentUsername= "+str(student_id)+"  ")
-            mysql.connection.commit()
+                returndate=str(data['returnDate'])
+                current_time = time.strftime(r"%Y-%m-%d %H:%M:%S", time.localtime())
+                
+                if current_time>returndate :
+                    returndate=time.strftime(returndate)
 
-        else :
-            returndate=time.strftime(returndate)
-            datetimeFormat = '%Y-%m-%d %H:%M:%S'
-            diff = datetime.datetime.strptime(current_time, datetimeFormat)\
-    - datetime.datetime.strptime(returndate, datetimeFormat)
-            #should be negative
-            print(diff.days)
+                    datetimeFormat = '%Y-%m-%d %H:%M:%S'
+                    diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+            - datetime.datetime.strptime(returndate, datetimeFormat)
+                    amount_to_be_added_to_fine=(diff.days)*10
 
-        cur.close()
+                    cur.execute("update transactions set fine=fine+ "+str(amount_to_be_added_to_fine)+" studentUsername= "+str(student_id)+"  ")
+                    mysql.connection.commit()
 
-        flash('Book Returned', 'success')
-        return redirect(url_for('bookslist'))
+                else :
+                    returndate=time.strftime(returndate)
+                    datetimeFormat = '%Y-%m-%d %H:%M:%S'
+                    diff = datetime.datetime.strptime(current_time, datetimeFormat)\
+            - datetime.datetime.strptime(returndate, datetimeFormat)
+                    #should be negative
+                    print(diff.days)
+                flash('Book Returned', 'success')
+                return redirect(url_for('bookslist'))
 
-    return render_template('return_books.html', form= form)
+
+            else :
+                flash('Book already returned','success')
+                return redirect(url_for('bookslist'))
+            cur.close()
+
+    else :
+        flash('No books found','success')   
+
+    return render_template('return_books.html', form= form,books=books)
 
 
 
