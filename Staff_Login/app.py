@@ -10,7 +10,7 @@ from datetime import timedelta
 app = Flask(__name__)
 
 #/home/mugdha/Projects/Library_Management_System/config.py
-app.config.from_pyfile('/home/prachiti/Desktop/proj/LibraryManagement/Library-Management-System/config.py')
+app.config.from_pyfile('/home/prachiti/Desktop/proj/Library-Management-System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -183,7 +183,7 @@ def issue_books(bookName):
     return render_template('issue_books.html', form= form)
 
 class ReturnForm(Form):
-    bookid = StringField("ID of the book to be returned")    
+    bookName = StringField("Name of the book to be returned")    
     studentUsername = StringField("Student ID number", [validators.Length(min=1)])    
     staffUsername = StringField('Enter your ID to authenticate', [validators.Length(min=1)])
 
@@ -194,9 +194,13 @@ def return_books():
     if request.method == 'POST' and form.validate():
         student_id = form.studentUsername.data
         staff_id  = form.staffUsername.data
-        book_id = form.bookid.data
+        book_id = form.bookName.data
 
         cur = mysql.connection.cursor()
+        # cur.execute("select book_id")
+        # data=cur.fetchone()
+        # book_id=data[book_id]
+
         cur.execute("update books set available = 1 where book_id = "+str(book_id)+" ")
 
         mysql.connection.commit()
