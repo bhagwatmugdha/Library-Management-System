@@ -116,13 +116,24 @@ def is_logged_in(f):
     return wrap
 
 # Creating the Books list
-@app.route('/bookslist')
+@app.route('/bookslist',methods=['GET','POST'])
 # @is_logged_in
 def bookslist():
 
     # Create Cursor
     cur = mysql.connection.cursor()
-
+    
+    if request.method == 'POST':
+        searchbook=request.form['search']
+        
+        data=cur.execute("select * from books where bookName= '"+str(searchbook)+"' and available = 1 ")
+        
+        
+        if data > 0 :
+            return redirect(url_for('issue_books',bookName=searchbook))
+        else :
+            msg = 'This book is not available right now'
+            return render_template('bookslist.html',msg=msg)
     # Execute
     result = cur.execute("SELECT bookName, count(bookName) AS count, sum(available) as available FROM books GROUP BY bookName") #where available <> 0
 
@@ -199,7 +210,7 @@ def return_books():
             student_id = form.studentUsername.data
             book_name = form.book_name.data
 
-            print(book_name)
+            
 
             cur = mysql.connection.cursor()
             result=cur.execute("select book_id from transactions where studentUsername= "+str(student_id)+" and bookName= '"+str(book_name)+"' ")
