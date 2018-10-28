@@ -190,10 +190,11 @@ class ReturnForm(Form):
 @is_logged_in
 def return_books():
     cur_start=mysql.connection.cursor()
-    result=cur_start.execute("select bookName from books where available =1 group by bookName")
+    result=cur_start.execute("select bookName from books where available = 0 group by bookName")
     books=cur_start.fetchall()
+    form=ReturnForm(request.form)
     if result > 0 :
-        form=ReturnForm(request.form)
+        
         if request.method == 'POST' and form.validate():
             student_id = form.studentUsername.data
             book_name = form.book_name.data
@@ -270,7 +271,7 @@ def check_fine():
     if result > 0:
         return render_template('check_fine.html', books = books)
     else:
-        msg = 'No books found'
+        msg = 'No outstanding fines'
         return render_template('check_fine.html', msg= msg)
 
     # Close connection
@@ -306,6 +307,18 @@ def pay_fine():
 
         
     return render_template('pay_fine.html',form=form,data=data,newfine=newfine)
+
+@app.route('/analyse',methods=['GET','POST'])
+@is_logged_in
+def analyse():
+    cur= mysql.connection.cursor()
+    cur.execute("select studentUsername,count(*) as num from transactions group by studentUsername,fine order by fine  desc, num desc limit 5")
+    data=cur.fetchall()
+    print data
+    mysql.connection.commit()
+    return render_template('analyse.html',data=data)
+
+
 
 # Creating the Hospital List
 @app.route('/hospitallist')
