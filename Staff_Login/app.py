@@ -10,7 +10,7 @@ from datetime import timedelta
 app = Flask(__name__)
 
 #/home/mugdha/Projects/Library_Management_System/config.py
-app.config.from_pyfile('/home/prachiti/Desktop/proj/LibraryManagement/Library-Management-System/config.py')
+app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -168,7 +168,7 @@ def issue_books(bookName):
         
 
         # Execute
-        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, bookName, book_id) VALUES(%s, %s, %s, %s)",(student_id, staff_id, bookName, book['book_id']))#, session['username']))
+        cur.execute("INSERT INTO transactions( studentUsername, staffUsername, bookName, book_id) VALUES(%s, %s, %s, %s)",(student_id, session['staffUsername'], bookName, book['book_id']))#, session['username']))
         cur.execute("UPDATE books SET available = 0 WHERE book_id = "+str(book['book_id'])+"")
         # Commit to MySQL
         mysql.connection.commit()
