@@ -5,8 +5,8 @@ from passlib.hash import sha256_crypt
 from functools import wraps
 
 app = Flask(__name__)
-
-app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
+#/home/mugdha/Projects/Library_Management_System/config.py
+app.config.from_pyfile('/home/prachiti/Desktop/proj/Library-Management-System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -149,12 +149,14 @@ def student_detail():
     cur = mysql.connection.cursor()
 
     # Execute
-    result = cur.execute("SELECT * FROM transactions WHERE studentUsername = %s", (session['studentUsername'], )) #NATURAL JOIN hospital WHERE aadharNo= %s ORDER BY date_of_test desc", (session['aadharNo'],))
+    result = cur.execute("SELECT * FROM transactions WHERE studentUsername = %s", (session['studentUsername'], )) 
 
     transactions = cur.fetchall()
-
+    cur.execute("select fine from transactions where studentUsername = %s",(session['studentUsername']))
+    fine=cur.fetchone()
+    print fine
     if result > 0:
-        return render_template('student_detail.html', transactions = transactions)
+        return render_template('student_detail.html', transactions = transactions,fine=fine)
     else:
         msg = 'No recorded transactions'
         return render_template('student_detail.html', msg= msg)
