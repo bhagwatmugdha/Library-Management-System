@@ -16,11 +16,11 @@ CREATE TABLE students(student_id INT PRIMARY KEY AUTO_INCREMENT, studentName VAR
 
 select * from students;
 
-CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100), addedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, available BOOL DEFAULT 1);
+CREATE TABLE books(book_id INT PRIMARY KEY AUTO_INCREMENT, bookName VARCHAR(100), author VARCHAR(100), addedDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP, available BOOL DEFAULT 1);
 
 select * from books;
 
-CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, studentUsername VARCHAR(100), staffUsername VARCHAR(100), bookName VARCHAR(100), issueDate DATETIME, returnDate DATETIME, fine INT DEFAULT 0, done );
+CREATE TABLE transactions(transaction_id INT AUTO_INCREMENT PRIMARY KEY, studentUsername VARCHAR(100), staffUsername VARCHAR(100), book_id INT(11), bookName VARCHAR(100), issueDate DATETIME, returnDate DATETIME, fine INT DEFAULT 0, Done INT);
 
 select * from transactions;
 

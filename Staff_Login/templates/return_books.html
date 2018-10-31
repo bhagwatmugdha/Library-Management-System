@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  
+<!-- <body background = "{{ url_for('static', filename='images/returnbook.png')}}" background-size:100px 100px;> -->
 
   <div class= "bg" >
     <h1>Return Books</h1>
@@ -27,10 +27,11 @@
 
       
         <input type="submit" class="btn btn-primary" value="Submit">
-      
+        <a class="btn btn-primary" style="float: right;" href="/pay_fine"> Pay Fine </a>
+  
     </form>
 
-    <a class="btn btn-primary" href="/pay_fine"> Pay Fine </a>
+
   </div>
  
 

@@ -1,23 +1,26 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Update Blood Bank</h1>
+<body background = "https://images.pexels.com/photos/48126/books-education-school-literature-48126.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"></body>
+  <h1>Add Books</h1>
 
   {% from "includes/_formhelpers.html" import render_field %}
 
   <form method="POST" action="">
     <div class="form-group">
-      {{render_field(form.bb_name, class_="form-control")}}
+      {{render_field(form.bookName, class_="form-control")}}
     </div>
     <div class="form-group">
-      {{render_field(form.bb_quantity, class_="form-control")}}
+      {{render_field(form.author, class_="form-control")}}
     </div>
     <div class="form-group">
-      {{render_field(form.hospital_name, class_="form-control")}}
+      {{render_field(form.quantity, class_="form-control")}}
     </div>
     <p>
       <input type="submit" class="btn btn-primary" value="Submit">
     </p>
   </form>
+
+  
 
 {% endblock %}
