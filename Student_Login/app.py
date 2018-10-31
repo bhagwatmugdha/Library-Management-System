@@ -152,7 +152,7 @@ def student_detail():
     result = cur.execute("SELECT * FROM transactions WHERE studentUsername = %s", (session['studentUsername'], )) 
 
     transactions = cur.fetchall()
-    cur.execute("select fine from transactions where studentUsername = %s",(session['studentUsername']))
+    cur.execute("select fine from transactions where studentUsername like %s",(session['studentUsername'], ))
     fine=cur.fetchone()
     print fine
     if result > 0:
