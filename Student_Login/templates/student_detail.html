@@ -1,11 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1> Welcome {{session.username}} </h1>
-  
+<body background = "{{ url_for('static', filename='images/try.jpeg')}}" background-size:100px 100px;></body>
+  <h1> Welcome {{session.studentUsername}} </h1>
+
   <hr>
-  Your pending fine is {{fine.fine}}
+
+  <h4>Your pending fine is {{fine.fine}}</h4>
+
+  <hr>
+
+  <br>
+
   <table class="table table-hover table-stripped">
+    <thead class="thead-dark">
     <tr>
       <th>Book Name</th>
       <th>Issue Date</th>

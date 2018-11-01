@@ -6,7 +6,7 @@ from functools import wraps
 
 app = Flask(__name__)
 #/home/mugdha/Projects/Library_Management_System/config.py
-app.config.from_pyfile('/home/prachiti/Desktop/proj/Library-Management-System/config.py')
+app.config.from_pyfile('/home/mugdha/Projects/Library_Management_System/config.py')
 
 # Initializing MySQL
 mysql = MySQL(app)
@@ -160,67 +160,6 @@ def student_detail():
     else:
         msg = 'No recorded transactions'
         return render_template('student_detail.html', msg= msg)
-
-    # Close connection
-    cur.close()
-
-
-# Creating the Report list
-@app.route('/detail')
-@is_logged_in
-def detail():
-
-    # Create Cursor
-    cur = mysql.connection.cursor()
-
-    # Execute
-    result = cur.execute("SELECT * FROM data NATURAL JOIN hospital WHERE aadharNo= %s ORDER BY date_of_test desc", (session['aadharNo'],))
-
-    reports = cur.fetchall()
-
-    if result > 0:
-        return render_template('detail.html', reports = reports)
-    else:
-        msg = 'No reports found'
-        return render_template('detail.html', msg= msg)
-
-    # Close connection
-    cur.close()
-
-# Displaying each individual report
-@app.route('/viewReport/<string:test_id>/')
-def viewReport(test_id):
-    # Create Cursor
-    cur = mysql.connection.cursor()
-
-    # Get Article
-    result = cur.execute("SELECT * FROM data NATURAL JOIN hospital WHERE test_id= %s", [test_id])
-
-    report = cur.fetchone()
-
-    #if result > 0:
-    return render_template('viewReport.html', report=report)
-    # Close connection
-    #cur.close()
-
-# Creating the blood bank
-@app.route('/bloodbank')
-
-def bloodbank():
-
-    # Create Cursor
-    cur = mysql.connection.cursor()
-
-    # Execute
-    result = cur.execute("SELECT * FROM bloodbank NATURAL JOIN hospital ORDER BY bb_name")
-
-    bloodbanks = cur.fetchall()
-
-    if result > 0:
-        return render_template('bloodbank.html', bloodbanks = bloodbanks)
-    else:
-        msg = 'No Stock'
-        return render_template('bloodbank.html', msg= msg)
 
     # Close connection
     cur.close()
